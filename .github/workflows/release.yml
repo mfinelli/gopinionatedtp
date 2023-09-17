@@ -1,0 +1,14 @@
+---
+name: Release
+on:
+  push:
+    tags: [v*]
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: ncipollo/release-action@v1
