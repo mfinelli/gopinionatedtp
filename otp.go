@@ -43,6 +43,11 @@ func GenerateNewSecret() (string, error) {
 		EncodeToString(key), nil
 }
 
+// BuildTotpUri returns a otpauth:// scheme URI suitable for input into a QR
+// code generator. It requires the username of the user, an issuer and the
+// user's OTP secret (generated with GenerateNewSecret) and reurns the URI:
+//
+// otpauth://totp/[issuer]:[username]?issuer=[issuer]&secret=[secret]
 func BuildTotpUri(username, issuer, secret string) string {
 	u := url.URL{
 		Scheme: "otpauth",
