@@ -24,6 +24,77 @@ as another blog post on implementing OTP in Go:
 
 ## usage
 
+Below is an example how to generate a new secret for some user, encrypt it
+(saving it to the database is left as an exercise for the reader), create a QR
+code and then generate a token and verify it.
+
+**N.B.** the secrets need to be stored in the database _encrypted_ not hashed
+(like for passwords) as it's necessary to access the secret in order to verify
+a provided token.
+
+```go
+import "crypto/rand"
+import "encoding/base64"
+import "fmt"
+
+import gotp "go.finelli.dev/gopinionatedtp"
+
+func main() {
+	// generate an encryption key (you should persist this somewhere
+	// secure!)
+	r := make([]byte, 32)
+	rand.Read(r)
+	key := base64.StdEncoding.EncodeToString(r)
+
+	// generate a new secret for a given user
+	secret, err := gotp.GenerateNewSecret()
+	if err != nil {
+		panic(err)
+	}
+
+	// encrypt the secret to store it in the database
+	crypt, err := gotp.EncryptOtpSecret(secret, key)
+	if err != nil {
+		panic(err)
+	}
+
+	// ...save the result to the user record
+
+	// dump a QR code to the terminal to scan with an authenticator app
+	err = gotp.QrCodeToTerminal("user@example.com", "yourapp", secret)
+	if err != nil {
+		panic(err)
+	}
+
+	// ...retrieve the encrypted secret from the database
+
+	// decrypt the secret for use
+	secret, err := gotp.DecryptOtpSecret(crypt, key)
+	if err != nil {
+		panic(err)
+	}
+
+	// calculate the current token (for fun!)
+	interval := int(time.Now().UTC().Unix() / 30) // 30s period
+	token, err := gotp.GenerateToken(secret, interval)
+	if err != nil {
+		panic(err)
+	}
+
+	// validate a given token
+	valid, err := gotp.VerifyToken("123456", secret)
+	if err != nil {
+		panic(err)
+	}
+
+	if valid {
+		fmt.Println("Valid token!")
+	} else {
+		fmt.Println("Invalid token!")
+	}
+}
+```
+
 ## license
 
 ```
