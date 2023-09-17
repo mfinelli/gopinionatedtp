@@ -1,5 +1,8 @@
 # (gO)pinionatedTP
 
+[![CI](https://github.com/mfinelli/gopinionatedtp/actions/workflows/default.yml/badge.svg)](https://github.com/mfinelli/gopinionatedtp/actions/workflows/default.yml)
+[![Go Reference](https://pkg.go.dev/badge/go.finelli.dev/gopinionedtp.svg)](https://pkg.go.dev/go.finelli.dev/gopinionedtp)
+
 An opinionated TOTP library for Golang.
 
 ## background
