@@ -19,11 +19,14 @@
 package otp
 
 import (
-	// "crypto/hmac"
+	"crypto/hmac"
 	"crypto/rand"
+	"crypto/sha1"
 	"encoding/base32"
+	"encoding/binary"
 	"fmt"
 	"net/url"
+	"time"
 )
 
 // GenerateNewSecret does what it says on the tin: it generates a new secret
@@ -54,4 +57,44 @@ func BuildTotpUri(username, issuer, secret string) string {
 	u.RawQuery = v.Encode()
 
 	return u.String()
+}
+
+func GenerateToken(secret string, interval int) (string, error) {
+	key, err := base32.StdEncoding.WithPadding(base32.NoPadding).
+		DecodeString(secret)
+	if err != nil {
+		return "", err
+	}
+
+	length := 6 // 6 character codes
+
+	// totp: https://datatracker.ietf.org/doc/html/rfc6238
+	// hotp: https://datatracker.ietf.org/doc/html/rfc4226
+	hash := hmac.New(sha1.New, key)
+	err = binary.Write(hash, binary.BigEndian, int64(interval))
+	if err != nil {
+		return "", err
+	}
+	sign := hash.Sum(nil)
+
+	offset := sign[19] & 15
+	truncated := binary.BigEndian.Uint32(sign[offset : offset+4])
+	return fmt.Sprintf("%0*d", length, (truncated&0x7fffffff)%1000000), nil
+}
+
+func VerifyToken(providedToken, secret string) (bool, error) {
+	interval := int(time.Now().UTC().Unix() / 30) // 30s period
+
+	for i := interval - 1; i <= interval+1; i++ {
+		token, err := GenerateToken(secret, i)
+		if err != nil {
+			return false, err
+		}
+
+		if token == providedToken {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }

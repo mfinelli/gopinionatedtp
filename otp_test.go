@@ -19,9 +19,12 @@ package otp
 import (
 	"encoding/base32"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
+
+const testOtpSecret = "SEYAQXI5QGY7VSU4CQP2I4BSBU"
 
 func TestGenerateNewSecret(t *testing.T) {
 	s, e := GenerateNewSecret()
@@ -39,4 +42,32 @@ func TestBuildTotpUri(t *testing.T) {
 		"?issuer=Issuer&secret=SECRET"
 	assert.Equal(t, expected, BuildTotpUri("test@example.com", "Issuer",
 		"SECRET"))
+}
+
+func TestGenerateToken(t *testing.T) {
+	_, err := GenerateToken("not base32 encoded", 1)
+	assert.NotNil(t, err)
+	assert.Equal(t, "illegal base32 data at input byte 0", err.Error())
+
+	token, err := GenerateToken(testOtpSecret, 1)
+	assert.Nil(t, err)
+	assert.Equal(t, "400163", token)
+}
+
+func TestVerifyToken(t *testing.T) {
+	_, err := VerifyToken("000000", "not base32 encoded")
+	assert.NotNil(t, err)
+	assert.Equal(t, "illegal base32 data at input byte 0", err.Error())
+
+	ok, err := VerifyToken("000000", testOtpSecret)
+	assert.Nil(t, err)
+	assert.False(t, ok)
+
+	interval := int(time.Now().UTC().Unix() / 30)
+	token, err := GenerateToken(testOtpSecret, interval)
+	assert.Nil(t, err)
+
+	ok, err = VerifyToken(token, testOtpSecret)
+	assert.Nil(t, err)
+	assert.True(t, ok)
 }
