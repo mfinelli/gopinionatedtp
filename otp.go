@@ -22,6 +22,8 @@ import (
 	// "crypto/hmac"
 	"crypto/rand"
 	"encoding/base32"
+	"fmt"
+	"net/url"
 )
 
 // GenerateNewSecret does what it says on the tin: it generates a new secret
@@ -36,4 +38,20 @@ func GenerateNewSecret() (string, error) {
 
 	return base32.StdEncoding.WithPadding(base32.NoPadding).
 		EncodeToString(key), nil
+}
+
+func BuildTotpUri(username, issuer, secret string) string {
+	u := url.URL{
+		Scheme: "otpauth",
+		Host:   "totp",
+	}
+
+	u.Path = fmt.Sprintf("%s:%s", issuer, username)
+
+	v := url.Values{}
+	v.Set("secret", secret)
+	v.Set("issuer", issuer)
+	u.RawQuery = v.Encode()
+
+	return u.String()
 }

@@ -33,3 +33,10 @@ func TestGenerateNewSecret(t *testing.T) {
 	assert.Nil(t, e)
 	assert.Equal(t, 16, len(b))
 }
+
+func TestBuildTotpUri(t *testing.T) {
+	expected := "otpauth://totp/Issuer:test@example.com" +
+		"?issuer=Issuer&secret=SECRET"
+	assert.Equal(t, expected, BuildTotpUri("test@example.com", "Issuer",
+		"SECRET"))
+}
