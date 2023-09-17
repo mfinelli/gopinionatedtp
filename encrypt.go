@@ -25,8 +25,8 @@ import (
 	"golang.org/x/crypto/nacl/secretbox"
 )
 
-// https://pkg.go.dev/golang.org/x/crypto/nacl/secretbox#example-package
-
+// EncryptOtpSecret encrypts the OTP secret using secretbox:
+// https://pkg.go.dev/golang.org/x/crypto/nacl/secretbox
 func EncryptOtpSecret(secret string, key *[32]byte) (string, error) {
 	var nonce [24]byte
 	if _, err := io.ReadFull(rand.Reader, nonce[:]); err != nil {
@@ -39,6 +39,7 @@ func EncryptOtpSecret(secret string, key *[32]byte) (string, error) {
 	return r, nil
 }
 
+// DecryptOtpSecret will return the original OTP secret after decryption.
 func DecryptOtpSecret(b64Secret string, key *[32]byte) (string, error) {
 	secret, err := base64.StdEncoding.DecodeString(b64Secret)
 	if err != nil {
@@ -58,6 +59,8 @@ func DecryptOtpSecret(b64Secret string, key *[32]byte) (string, error) {
 	return string(decrypted), nil
 }
 
+// Given an encryption key as a tring RawKeyToBytes returns it as bytes that
+// can be used by the encryption functions.
 func RawKeyToBytes(rawKey string) (*[32]byte, error) {
 	if rawKey == "" {
 		return nil, fmt.Errorf("encryption key is unset")

@@ -15,7 +15,10 @@
  */
 
 // The otp package provides an opinionated way to generate and verify TOTP
-// tokens.
+// tokens as well as providing an easy way to encrypt the secrets for
+// persistent storage (e.g., in the database alongside user records). It also
+// provides a facility to dump QR codes to the terminal so that they can be
+// scanned by an authenticator application.
 package otp
 
 import (
@@ -64,6 +67,8 @@ func BuildTotpUri(username, issuer, secret string) string {
 	return u.String()
 }
 
+// GenerateToken returns the current time-based token for the given secret
+// and interval.
 func GenerateToken(secret string, interval int) (string, error) {
 	key, err := base32.StdEncoding.WithPadding(base32.NoPadding).
 		DecodeString(secret)
@@ -87,6 +92,8 @@ func GenerateToken(secret string, interval int) (string, error) {
 	return fmt.Sprintf("%0*d", length, (truncated&0x7fffffff)%1000000), nil
 }
 
+// VerifyToken returns true if the provided token matches the current token
+// (+/- one interval) and false otherwise.
 func VerifyToken(providedToken, secret string) (bool, error) {
 	interval := int(time.Now().UTC().Unix() / 30) // 30s period
 
