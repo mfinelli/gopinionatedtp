@@ -2,7 +2,7 @@
 
 GOpinionatedTP follows [semantic versioning](https://semver.org).
 
-## unreleased
+## v1.1.0 (2024/02/01)
 
 - Add function to calculate default 30 second interval
 
