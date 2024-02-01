@@ -33,6 +33,8 @@ code and then generate a token and verify it.
 a provided token.
 
 ```go
+package main
+
 import "crypto/rand"
 import "encoding/base64"
 import "fmt"
@@ -75,8 +77,7 @@ func main() {
 	}
 
 	// calculate the current token (for fun!)
-	interval := int(time.Now().UTC().Unix() / 30) // 30s period
-	token, err := gotp.GenerateToken(secret, interval)
+	token, err := gotp.GenerateToken(secret, gotp.DefaultInterval())
 	if err != nil {
 		panic(err)
 	}
@@ -98,7 +99,7 @@ func main() {
 ## license
 
 ```
-Copyright 2023 Mario Finelli
+Copyright 2023-2024 Mario Finelli
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

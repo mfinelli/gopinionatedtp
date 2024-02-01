@@ -1,5 +1,5 @@
 /*!
- * Copyright 2023 Mario Finelli
+ * Copyright 2023-2024 Mario Finelli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,11 @@ import (
 	"net/url"
 	"time"
 )
+
+// The DefaultInterval calculates the default 30 second interval.
+func DefaultInterval() int {
+	return int(time.Now().UTC().Unix() / 30)
+}
 
 // GenerateNewSecret does what it says on the tin: it generates a new secret
 // that is suitable for use as a TOTP secret.
