@@ -3,7 +3,7 @@ module go.finelli.dev/gopinionatedtp
 go 1.21.6
 
 require (
-	github.com/pterm/pterm v0.12.76
+	github.com/pterm/pterm v0.12.79
 	github.com/stretchr/testify v1.8.4
 	github.com/yeqown/go-qrcode/v2 v2.2.2
 	golang.org/x/crypto v0.18.0
