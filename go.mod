@@ -6,7 +6,7 @@ require (
 	github.com/pterm/pterm v0.12.76
 	github.com/stretchr/testify v1.8.4
 	github.com/yeqown/go-qrcode/v2 v2.2.2
-	golang.org/x/crypto v0.18.0
+	golang.org/x/crypto v0.21.0
 )
 
 require (
@@ -22,8 +22,8 @@ require (
 	github.com/rivo/uniseg v0.4.6 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/yeqown/reedsolomon v1.0.0 // indirect
-	golang.org/x/sys v0.16.0 // indirect
-	golang.org/x/term v0.16.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/term v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
