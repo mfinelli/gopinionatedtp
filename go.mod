@@ -5,7 +5,7 @@ go 1.21.6
 require (
 	github.com/pterm/pterm v0.12.76
 	github.com/stretchr/testify v1.8.4
-	github.com/yeqown/go-qrcode/v2 v2.2.2
+	github.com/yeqown/go-qrcode/v2 v2.2.3
 	golang.org/x/crypto v0.18.0
 )
 
