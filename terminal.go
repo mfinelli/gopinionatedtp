@@ -59,41 +59,41 @@ func (w terminalWriter) Write(mat qrcode.Matrix) error {
 		func(x int, y int, state qrcode.QRValue) {
 			if x == 0 && y == 0 {
 				// add the top row border
-				for i := 0; i < wwWithBorder; i++ {
-					pterm.FgWhite.Printf(chr)
+				for range wwWithBorder {
+					pterm.FgWhite.Print(chr)
 				}
 				fmt.Println()
-				for i := 0; i < wwWithBorder; i++ {
-					pterm.FgWhite.Printf(chr)
+				for range wwWithBorder {
+					pterm.FgWhite.Print(chr)
 				}
 				fmt.Println()
 			}
 
 			if y == 0 {
-				pterm.FgWhite.Printf(chr)
-				pterm.FgWhite.Printf(chr)
+				pterm.FgWhite.Print(chr)
+				pterm.FgWhite.Print(chr)
 			}
 
 			if state.IsSet() {
-				pterm.FgBlack.Printf(chr)
+				pterm.FgBlack.Print(chr)
 			} else {
-				pterm.FgWhite.Printf(chr)
+				pterm.FgWhite.Print(chr)
 			}
 
 			if y == ww-1 {
-				pterm.FgWhite.Printf(chr)
-				pterm.FgWhite.Printf(chr)
+				pterm.FgWhite.Print(chr)
+				pterm.FgWhite.Print(chr)
 				fmt.Println()
 			}
 		})
 
 	// add the bottom row border
-	for i := 0; i < wwWithBorder; i++ {
-		pterm.FgWhite.Printf(chr)
+	for range wwWithBorder {
+		pterm.FgWhite.Print(chr)
 	}
 	fmt.Println()
-	for i := 0; i < wwWithBorder; i++ {
-		pterm.FgWhite.Printf(chr)
+	for range wwWithBorder {
+		pterm.FgWhite.Print(chr)
 	}
 	fmt.Println()
 
